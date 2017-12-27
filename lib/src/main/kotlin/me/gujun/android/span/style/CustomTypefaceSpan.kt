@@ -1,4 +1,4 @@
-package com.dxgujun.span.style
+package me.gujun.android.span.style
 
 import android.graphics.Paint
 import android.graphics.Typeface

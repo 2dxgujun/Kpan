@@ -1,4 +1,4 @@
-package com.dxgujun.span.style
+package me.gujun.android.span.style
 
 import android.text.TextPaint
 import android.text.style.CharacterStyle

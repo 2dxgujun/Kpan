@@ -1,4 +1,4 @@
-package com.dxgujun.span
+package me.gujun.android.span
 
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -21,15 +21,15 @@ import android.text.style.SuperscriptSpan
 import android.text.style.TypefaceSpan
 import android.text.style.URLSpan
 import android.view.View
-import com.dxgujun.span.Span.ImageAlignment
-import com.dxgujun.span.Span.ImageAlignment.BASELINE
-import com.dxgujun.span.Span.ImageAlignment.BOTTOM
-import com.dxgujun.span.Span.TextAlignment.CENTER
-import com.dxgujun.span.Span.TextAlignment.NORMAL
-import com.dxgujun.span.Span.TextAlignment.OPPOSITE
-import com.dxgujun.span.style.CustomTypefaceSpan
-import com.dxgujun.span.style.LineSpacingSpan
-import com.dxgujun.span.style.TextDecorationLineSpan
+import me.gujun.android.span.Span.ImageAlignment
+import me.gujun.android.span.Span.ImageAlignment.BASELINE
+import me.gujun.android.span.Span.ImageAlignment.BOTTOM
+import me.gujun.android.span.Span.TextAlignment.CENTER
+import me.gujun.android.span.Span.TextAlignment.NORMAL
+import me.gujun.android.span.Span.TextAlignment.OPPOSITE
+import me.gujun.android.span.style.CustomTypefaceSpan
+import me.gujun.android.span.style.LineSpacingSpan
+import me.gujun.android.span.style.TextDecorationLineSpan
 
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
@@ -50,11 +50,11 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var text: CharSequence = ""
 
-  @ColorInt var textColor: Int = parent?.textColor ?: UNSPECIFIED
+  @ColorInt var textColor: Int = parent?.textColor ?: Span.Companion.UNSPECIFIED
 
-  @ColorInt var backgroundColor: Int = parent?.backgroundColor ?: UNSPECIFIED
+  @ColorInt var backgroundColor: Int = parent?.backgroundColor ?: Span.Companion.UNSPECIFIED
 
-  @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: Span.Companion.UNSPECIFIED
 
   var fontFamily: String = parent?.fontFamily ?: ""
 
@@ -62,11 +62,11 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var textStyle: String = parent?.textStyle ?: ""
 
-  var textAlign: TextAlignment? = null
+  var textAlign: Span.TextAlignment? = null
 
   var textDecorationLine: String = parent?.textDecorationLine ?: ""
 
-  @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var lineSpacing: Int = Span.Companion.UNSPECIFIED
 
   var onClick: (() -> Unit)? = null
 
@@ -75,15 +75,15 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
   var styles: ArrayList<Any> = arrayListOf()
 
   private fun buildCharacterStyle(builder: ArrayList<Any>) {
-    if (textColor != UNSPECIFIED) {
+    if (textColor != Span.Companion.UNSPECIFIED) {
       builder.add(ForegroundColorSpan(textColor))
     }
 
-    if (backgroundColor != UNSPECIFIED) {
+    if (backgroundColor != Span.Companion.UNSPECIFIED) {
       builder.add(BackgroundColorSpan(backgroundColor))
     }
 
-    if (textSize != UNSPECIFIED) {
+    if (textSize != Span.Companion.UNSPECIFIED) {
       builder.add(AbsoluteSizeSpan(textSize))
     }
 
@@ -132,7 +132,7 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
       }))
     }
 
-    if (lineSpacing != UNSPECIFIED) {
+    if (lineSpacing != Span.Companion.UNSPECIFIED) {
       builder.add(LineSpacingSpan(lineSpacing))
     }
   }

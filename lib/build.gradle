@@ -1,5 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
 
 android {
   compileSdkVersion 27
@@ -17,4 +19,68 @@ android {
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
   implementation 'com.android.support:support-annotations:27.0.2'
+}
+
+def GROUP = 'me.gujun.android'
+def ARTIFACTID = 'span'
+def VERSION = '1.0-SPAPSHOT'
+
+group = GROUP
+version = VERSION
+
+install {
+  repositories.mavenInstaller {
+    pom.project {
+      name ARTIFACTID
+      description 'Styling text with fun'
+      url 'https://github.com/2dxgujun/span'
+
+      packaging 'aar'
+      groupId GROUP
+      artifactId ARTIFACTID
+
+      licenses {
+        license {
+          name 'The Apache Software License, Version 2.0'
+          url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          distribution 'repo'
+        }
+      }
+      developers {
+        developer {
+          id '2dxgujun'
+          name 'Jun Gu'
+          email "2dxgujun@gmail.com"
+        }
+      }
+    }
+  }
+}
+
+try {
+  Properties properties = new Properties()
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+  bintray {
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+    configurations = ['archives']
+    pkg {
+      repo = 'maven'
+      name = ARTIFACTID
+      licenses = ['Apache-2.0']
+      vcsUrl = 'https://github.com/2dxgujun/span.git'
+    }
+  }
+
+  task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+  }
+
+  artifacts {
+    archives sourcesJar
+  }
+} catch (Exception e) {
+  println e
 }

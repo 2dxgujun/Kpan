@@ -1,23 +1,27 @@
-package com.dxgujun.span.sample
+package me.gujun.android.span.sample
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
 import android.text.style.TextAppearanceSpan
 import android.widget.Toast
-import com.dxgujun.span.Span.ImageAlignment.BASELINE
-import com.dxgujun.span.Span.TextAlignment.CENTER
-import com.dxgujun.span.Span.TextAlignment.NORMAL
-import com.dxgujun.span.Span.TextAlignment.OPPOSITE
-import com.dxgujun.span.image
-import com.dxgujun.span.quote
-import com.dxgujun.span.span
-import com.dxgujun.span.style
-import com.dxgujun.span.subscript
-import com.dxgujun.span.superscript
+import com.binaryfork.spanny.Spanny
 import kotlinx.android.synthetic.main.activity_sample.text
+import me.gujun.android.span.Span.TextAlignment.CENTER
+import me.gujun.android.span.Span.TextAlignment.NORMAL
+import me.gujun.android.span.Span.TextAlignment.OPPOSITE
+import me.gujun.android.span.image
+import me.gujun.android.span.quote
+import me.gujun.android.span.span
+import me.gujun.android.span.style
+import me.gujun.android.span.subscript
+import me.gujun.android.span.superscript
+
 
 class SampleActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +29,7 @@ class SampleActivity : AppCompatActivity() {
     setContentView(R.layout.activity_sample)
     // You must set this movement method to make clickable span work
     text.movementMethod = LinkMovementMethod.getInstance()
-    text.text = span {
+    text.text = me.gujun.android.span.span {
       span("StyleSpan") {
         textStyle = "bold_italic"
       }
@@ -77,7 +81,8 @@ class SampleActivity : AppCompatActivity() {
       }
       +"\n"
       span("CustomStyle") {
-        style(TextAppearanceSpan(this@SampleActivity, R.style.TextAppearance_Sample))
+        style(TextAppearanceSpan(this@SampleActivity,
+            R.style.TextAppearance_Sample))
       }
       +"\n"
       span {
@@ -123,7 +128,27 @@ class SampleActivity : AppCompatActivity() {
           textSize = dp(10)
         }
       }
+      +"\n"
+      span {
+        // Spans are hard?
+        +"Spans "
+        span {
+          textStyle = "bold"
+          +"are "
+          span("hard") {
+            textDecorationLine = "line-through"
+          }
+          +"?"
+        }
+      }
     }
+
+
+    val spanny = Spanny("Spans ")
+        .append("are ", StyleSpan(Typeface.BOLD))
+        .append("hard", StyleSpan(Typeface.BOLD), StrikethroughSpan())
+        .append("?")
+    text.text = spanny
   }
 
   private fun dp(dp: Int): Int = (dp * resources.displayMetrics.density + .5f).toInt()
