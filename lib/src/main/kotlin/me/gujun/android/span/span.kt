@@ -21,28 +21,11 @@ import android.text.style.SuperscriptSpan
 import android.text.style.TypefaceSpan
 import android.text.style.URLSpan
 import android.view.View
-import me.gujun.android.span.Span.ImageAlignment
-import me.gujun.android.span.Span.ImageAlignment.BASELINE
-import me.gujun.android.span.Span.ImageAlignment.BOTTOM
-import me.gujun.android.span.Span.TextAlignment.CENTER
-import me.gujun.android.span.Span.TextAlignment.NORMAL
-import me.gujun.android.span.Span.TextAlignment.OPPOSITE
 import me.gujun.android.span.style.CustomTypefaceSpan
 import me.gujun.android.span.style.LineSpacingSpan
 import me.gujun.android.span.style.TextDecorationLineSpan
 
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
-
-  enum class ImageAlignment {
-    BOTTOM,
-    BASELINE
-  }
-
-  enum class TextAlignment {
-    NORMAL,
-    OPPOSITE,
-    CENTER
-  }
 
   companion object {
     val UNSPECIFIED = -1
@@ -64,15 +47,13 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var textStyle: String = parent?.textStyle ?: ""
 
-  var textAlign: Span.TextAlignment? = null
+  var textAlign: String = parent?.textAlign ?: ""
 
   var textDecorationLine: String = parent?.textDecorationLine ?: ""
 
   @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
 
   var onClick: (() -> Unit)? = null
-
-  var url: String = ""
 
   var styles: ArrayList<Any> = arrayListOf()
 
@@ -118,18 +99,14 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
         }
       })
     }
-
-    if (!TextUtils.isEmpty(url)) {
-      builder.add(URLSpan(url))
-    }
   }
 
   private fun buildParagraphStyle(builder: ArrayList<Any>) {
-    if (textAlign != null) {
+    if (!TextUtils.isEmpty(textAlign)) {
       builder.add(AlignmentSpan.Standard(when (textAlign) {
-        NORMAL -> Layout.Alignment.ALIGN_NORMAL
-        OPPOSITE -> Layout.Alignment.ALIGN_OPPOSITE
-        CENTER -> Layout.Alignment.ALIGN_CENTER
+        "normal" -> Layout.Alignment.ALIGN_NORMAL
+        "opposite" -> Layout.Alignment.ALIGN_OPPOSITE
+        "center" -> Layout.Alignment.ALIGN_CENTER
         else -> throw RuntimeException("Unknown text alignment")
       }))
     }
@@ -216,6 +193,17 @@ fun Span.span(text: CharSequence, init: Span.() -> Unit = {}): Span = run {
   this
 }
 
+fun Span.link(url: String, text: CharSequence = "",
+    init: Span.() -> Unit = {}): Span = run {
+  append(Span(parent = this).apply {
+    this.text = text
+    this.styles.add(URLSpan(url))
+    init()
+    build()
+  })
+  this
+}
+
 fun Span.quote(@ColorInt color: Int, text: CharSequence = "",
     init: Span.() -> Unit = {}): Span = run {
   append(Span(parent = this).apply {
@@ -247,14 +235,15 @@ fun Span.subscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = 
   this
 }
 
-fun Span.image(drawable: Drawable, alignment: ImageAlignment = BOTTOM,
+fun Span.image(drawable: Drawable, alignment: String = "bottom",
     init: Span.() -> Unit = {}): Span = run {
   drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
   append(Span(parent = this).apply {
     this.text = " "
     this.styles.add(ImageSpan(drawable, when (alignment) {
-      BOTTOM -> ImageSpan.ALIGN_BOTTOM
-      BASELINE -> ImageSpan.ALIGN_BASELINE
+      "bottom" -> ImageSpan.ALIGN_BOTTOM
+      "baseline" -> ImageSpan.ALIGN_BASELINE
+      else -> throw RuntimeException("Unknown image alignment")
     }))
     init()
     build()

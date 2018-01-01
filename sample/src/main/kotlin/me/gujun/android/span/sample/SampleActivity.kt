@@ -10,10 +10,8 @@ import android.text.style.TextAppearanceSpan
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sample.text
 import me.gujun.android.span.Span
-import me.gujun.android.span.Span.TextAlignment.CENTER
-import me.gujun.android.span.Span.TextAlignment.NORMAL
-import me.gujun.android.span.Span.TextAlignment.OPPOSITE
 import me.gujun.android.span.image
+import me.gujun.android.span.link
 import me.gujun.android.span.quote
 import me.gujun.android.span.span
 import me.gujun.android.span.style
@@ -45,15 +43,15 @@ class SampleActivity : AppCompatActivity() {
       }
       +"\n"
       span("Align normal") {
-        textAlign = NORMAL
+        textAlign = "normal"
       }
       +"\n"
       span("Align center") {
-        textAlign = CENTER
+        textAlign = "center"
       }
       +"\n"
       span("Align opposite") {
-        textAlign = OPPOSITE
+        textAlign = "opposite"
       }
       +"\n"
       span("Underline") {
@@ -72,9 +70,7 @@ class SampleActivity : AppCompatActivity() {
         fontFamily = "serif"
       }
       +"\n"
-      span("URLSpan") {
-        url = "http://google.com"
-      }
+      link("http://google.com", "URLSpan")
       +"\n"
       span("ClickableSpan") {
         onClick = {
