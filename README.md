@@ -35,7 +35,7 @@ val spanny = Spanny("Spans ")
 ```
 
 That is cool in Java, but I was using kotlin, and it's not cool enough, it's verbose and limited. Kotlin allows to [*type-check* builders](https://kotlinlang.org/docs/reference/type-safe-builders.html), 
-which is a best way to build the spans, so do it:
+which is a best way to build the spans, so I make it happen:
 
 ```kotlin
 val text = span {
@@ -49,4 +49,38 @@ val text = span {
   }
   +"?"
 }
+```
+
+![sample](/screenshots/sample.png)
+
+### Download
+
+You can grab it via Gradle:
+
+```
+implementation 'me.gujun.android:span:1.0'
+```
+
+### Usage
+
+
+### Reference
+
+
+### License
+
+```
+Copyright 2018 Jun Gu
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 ```

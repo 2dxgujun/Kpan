@@ -46,15 +46,17 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   companion object {
     val UNSPECIFIED = -1
+
+    val globalStyles: ArrayList<Any> = arrayListOf()
   }
 
   var text: CharSequence = ""
 
-  @ColorInt var textColor: Int = parent?.textColor ?: Span.Companion.UNSPECIFIED
+  @ColorInt var textColor: Int = parent?.textColor ?: UNSPECIFIED
 
-  @ColorInt var backgroundColor: Int = parent?.backgroundColor ?: Span.Companion.UNSPECIFIED
+  @ColorInt var backgroundColor: Int = parent?.backgroundColor ?: UNSPECIFIED
 
-  @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: Span.Companion.UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: UNSPECIFIED
 
   var fontFamily: String = parent?.fontFamily ?: ""
 
@@ -66,7 +68,7 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var textDecorationLine: String = parent?.textDecorationLine ?: ""
 
-  @Dimension(unit = Dimension.PX) var lineSpacing: Int = Span.Companion.UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
 
   var onClick: (() -> Unit)? = null
 
@@ -75,15 +77,15 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
   var styles: ArrayList<Any> = arrayListOf()
 
   private fun buildCharacterStyle(builder: ArrayList<Any>) {
-    if (textColor != Span.Companion.UNSPECIFIED) {
+    if (textColor != UNSPECIFIED) {
       builder.add(ForegroundColorSpan(textColor))
     }
 
-    if (backgroundColor != Span.Companion.UNSPECIFIED) {
+    if (backgroundColor != UNSPECIFIED) {
       builder.add(BackgroundColorSpan(backgroundColor))
     }
 
-    if (textSize != Span.Companion.UNSPECIFIED) {
+    if (textSize != UNSPECIFIED) {
       builder.add(AbsoluteSizeSpan(textSize))
     }
 
@@ -132,13 +134,13 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
       }))
     }
 
-    if (lineSpacing != Span.Companion.UNSPECIFIED) {
+    if (lineSpacing != UNSPECIFIED) {
       builder.add(LineSpacingSpan(lineSpacing))
     }
   }
 
   fun build(): Span {
-    val builder = arrayListOf<Any>()
+    val spans = arrayListOf<Any>()
     if (!TextUtils.isEmpty(text)) {
       var p = this.parent
       while (p != null) {
@@ -149,18 +151,24 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
       }
       append(text)
 
-      buildCharacterStyle(builder)
-      buildParagraphStyle(builder) // AlignmentSpan
+      buildCharacterStyle(spans)
+      buildParagraphStyle(spans) // AlignmentSpan
     } else {
-      buildParagraphStyle(builder)
+      buildParagraphStyle(spans)
     }
     // Add custom styles
-    builder.addAll(styles)
+    spans.addAll(styles)
 
-    builder.forEach {
+    spans.forEach {
       setSpan(it, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     return this
+  }
+
+  fun setGlobalStyles() {
+    globalStyles.forEach {
+      setSpan(it, 0, length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+    }
   }
 
   operator fun CharSequence.unaryPlus(): CharSequence {
@@ -179,12 +187,16 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 }
 
 fun span(init: Span.() -> Unit): Span = Span().apply {
+  setGlobalStyles()
   init()
+  build()
 }
 
 fun span(text: CharSequence, init: Span.() -> Unit): Span = Span().apply {
+  setGlobalStyles()
   this.text = text
   init()
+  build()
 }
 
 fun Span.span(init: Span.() -> Unit = {}): Span = run {

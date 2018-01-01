@@ -1,17 +1,15 @@
 package me.gujun.android.span.sample
 
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
+import android.text.style.AbsoluteSizeSpan
 import android.text.style.TextAppearanceSpan
 import android.widget.Toast
-import com.binaryfork.spanny.Spanny
 import kotlinx.android.synthetic.main.activity_sample.text
+import me.gujun.android.span.Span
 import me.gujun.android.span.Span.TextAlignment.CENTER
 import me.gujun.android.span.Span.TextAlignment.NORMAL
 import me.gujun.android.span.Span.TextAlignment.OPPOSITE
@@ -24,12 +22,16 @@ import me.gujun.android.span.superscript
 
 
 class SampleActivity : AppCompatActivity() {
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_sample)
+
+    Span.globalStyles.add(AbsoluteSizeSpan(dp(14)))
+
     // You must set this movement method to make clickable span work
     text.movementMethod = LinkMovementMethod.getInstance()
-    text.text = me.gujun.android.span.span {
+    text.text = span {
       span("StyleSpan") {
         textStyle = "bold_italic"
       }
@@ -142,13 +144,6 @@ class SampleActivity : AppCompatActivity() {
         }
       }
     }
-
-
-    val spanny = Spanny("Spans ")
-        .append("are ", StyleSpan(Typeface.BOLD))
-        .append("hard", StyleSpan(Typeface.BOLD), StrikethroughSpan())
-        .append("?")
-    text.text = spanny
   }
 
   private fun dp(dp: Int): Int = (dp * resources.displayMetrics.density + .5f).toInt()
