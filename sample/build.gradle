@@ -20,6 +20,6 @@ android {
 dependencies {
   implementation 'com.android.support:appcompat-v7:27.0.2'
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-  implementation project(':lib')
+  implementation project(':span')
 }
 
