@@ -1,4 +1,4 @@
-# Android Span in kotlin
+# Android Spannable in kotlin
 
 > Kotlin wrappers around SpannableStringBuilder. Inspired by binaryfork's [Spanny](https://github.com/binaryfork/Spanny).
 
