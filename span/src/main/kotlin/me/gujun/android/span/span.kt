@@ -24,6 +24,7 @@ import android.view.View
 import me.gujun.android.span.style.CustomTypefaceSpan
 import me.gujun.android.span.style.LineSpacingSpan
 import me.gujun.android.span.style.TextDecorationLineSpan
+import me.gujun.android.span.style.VerticalPaddingSpan
 
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
@@ -47,11 +48,17 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var textStyle: String = parent?.textStyle ?: ""
 
-  var textAlign: String = parent?.textAlign ?: ""
+  var alignment: String = parent?.alignment ?: ""
 
   var textDecorationLine: String = parent?.textDecorationLine ?: ""
 
   @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
+
+  @Dimension(unit = Dimension.PX) var paddingTop: Int = UNSPECIFIED
+
+  @Dimension(unit = Dimension.PX) var paddingBottom: Int = UNSPECIFIED
+
+  @Dimension(unit = Dimension.PX) var verticalPadding: Int = UNSPECIFIED
 
   var onClick: (() -> Unit)? = null
 
@@ -102,8 +109,8 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
   }
 
   private fun buildParagraphStyle(builder: ArrayList<Any>) {
-    if (!TextUtils.isEmpty(textAlign)) {
-      builder.add(AlignmentSpan.Standard(when (textAlign) {
+    if (!TextUtils.isEmpty(alignment)) {
+      builder.add(AlignmentSpan.Standard(when (alignment) {
         "normal" -> Layout.Alignment.ALIGN_NORMAL
         "opposite" -> Layout.Alignment.ALIGN_OPPOSITE
         "center" -> Layout.Alignment.ALIGN_CENTER
@@ -113,6 +120,20 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
     if (lineSpacing != UNSPECIFIED) {
       builder.add(LineSpacingSpan(lineSpacing))
+    }
+
+    paddingTop = when {
+      paddingTop != UNSPECIFIED -> paddingTop
+      verticalPadding != UNSPECIFIED -> verticalPadding
+      else -> 0
+    }
+    paddingBottom = when {
+      paddingBottom != UNSPECIFIED -> paddingBottom
+      verticalPadding != UNSPECIFIED -> verticalPadding
+      else -> 0
+    }
+    if (paddingTop != 0 || paddingBottom != 0) {
+      builder.add(VerticalPaddingSpan(paddingTop, paddingBottom))
     }
   }
 

@@ -43,15 +43,15 @@ class SampleActivity : AppCompatActivity() {
       }
       +"\n"
       span("Align normal") {
-        textAlign = "normal"
+        alignment = "normal"
       }
       +"\n"
       span("Align center") {
-        textAlign = "center"
+        alignment = "center"
       }
       +"\n"
       span("Align opposite") {
-        textAlign = "opposite"
+        alignment = "opposite"
       }
       +"\n"
       span("Underline") {
@@ -85,23 +85,29 @@ class SampleActivity : AppCompatActivity() {
       +"\n"
       span {
         lineSpacing = dp(8)
-        +"LineSpacingSpan"
+        backgroundColor = Color.LTGRAY
+        verticalPadding = dp(5)
+        +"LineSpacingWithVerticalPadding"
         +"\n"
-        +"LineSpacingSpan"
+        +"LineSpacingWithVerticalPadding"
         +"\n"
-        +"LineSpacingSpan"
+        +"LineSpacingWithVerticalPadding"
       }
       +"\n"
       quote(Color.RED, "QuoteSpan")
       +"\n"
       span {
-        +"Plain text"
-        subscript("SubscriptSpan")
-        superscript("SuperscriptSpan")
+        +"Plain"
+        subscript("Subscript") {
+          textSize = dp(8)
+        }
+        superscript("Superscript") {
+          textSize = dp(8)
+        }
       }
       +"\n"
       span("BackgroundSpan") {
-        backgroundColor = Color.LTGRAY
+        backgroundColor = Color.CYAN
       }
       +"\n"
       span("ForegroundSpan") {
@@ -116,7 +122,7 @@ class SampleActivity : AppCompatActivity() {
       span {
         textColor = Color.BLUE
         textSize = dp(20)
-        +"Simple text"
+        +"Origin text"
         +"\n"
         span("Override foreground") {
           textColor = Color.RED

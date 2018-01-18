@@ -33,7 +33,7 @@ install {
     pom.project {
       name ARTIFACTID
       description 'Styling text with fun'
-      url 'https://github.com/2dxgujun/span'
+      url 'https://github.com/2dxgujun/Spannable-In-Kotlin'
 
       packaging 'aar'
       groupId GROUP
@@ -69,7 +69,7 @@ try {
       repo = 'maven'
       name = ARTIFACTID
       licenses = ['Apache-2.0']
-      vcsUrl = 'https://github.com/2dxgujun/span.git'
+      vcsUrl = 'https://github.com/2dxgujun/Spannable-In-Kotlin.git'
     }
   }
 
@@ -78,7 +78,19 @@ try {
     classifier = 'sources'
   }
 
+  task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath = files(project.android.getBootClasspath())
+    excludes = ['**/*.kt']
+  }
+
+  task javadocJar(type: Jar, dependsOn: javadoc) {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+  }
+
   artifacts {
+    archives javadocJar
     archives sourcesJar
   }
 } catch (Exception e) {
