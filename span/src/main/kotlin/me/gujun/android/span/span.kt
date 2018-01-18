@@ -26,6 +26,7 @@ import me.gujun.android.span.style.LineSpacingSpan
 import me.gujun.android.span.style.TextDecorationLineSpan
 import me.gujun.android.span.style.VerticalPaddingSpan
 
+// TODO Save styles
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   companion object {

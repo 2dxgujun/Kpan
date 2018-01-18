@@ -13,18 +13,21 @@ class VerticalPaddingSpan(private val paddingTop: Int,
     val spanStart = text.getSpanStart(this)
     val spanEnd = text.getSpanEnd(this)
 
-//    Log.d("DEBUG", "text: $text")
+//    Log.d("DEBUG", "text: \n$text")
 //    Log.d("DEBUG", "spanStart: $spanStart")
 //    Log.d("DEBUG", "spanEnd: $spanEnd")
 //    Log.d("DEBUG", "start: $start")
-//    Log.d("DEBUG", "end: $end")
+//    Log.d("DEBUG", "end: $end") // end may include the \n character
 //    Log.d("DEBUG", "spanstartv: $spanstartv")
 //    Log.d("DEBUG", "v: $v")
+//    Log.d("DEBUG", "-----------------------")
 
     if (spanStart == start) {
+      fm.top -= paddingTop
       fm.ascent -= paddingTop
     }
-    if (spanEnd == end - 1) {
+    if (spanEnd == end || spanEnd == end - 1) {
+      fm.bottom += paddingBottom
       fm.descent += paddingBottom
     }
   }

@@ -12,8 +12,18 @@ class LineSpacingSpan(private val add: Int) : LineHeightSpan {
     val spanStart = text.getSpanStart(this)
     val spanEnd = text.getSpanEnd(this)
 
-    if (start >= spanStart && end <= spanEnd) {
+//    Log.d("DEBUG", "text: \n$text")
+//    Log.d("DEBUG", "spanStart: $spanStart")
+//    Log.d("DEBUG", "spanEnd: $spanEnd")
+//    Log.d("DEBUG", "start: $start")
+//    Log.d("DEBUG", "end: $end") // end may include the \n character
+//    Log.d("DEBUG", "spanstartv: $spanstartv")
+//    Log.d("DEBUG", "v: $v")
+//    Log.d("DEBUG", "-----------------------")
+
+    if (start >= spanStart && end < spanEnd) {
       fm.descent += add
+      fm.bottom += add
     }
   }
 }
