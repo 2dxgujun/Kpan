@@ -58,7 +58,7 @@ val text = span {
 You can grab it via Gradle:
 
 ```
-implementation 'me.gujun.android:span:1.0'
+implementation 'me.gujun.android:span:1.1'
 ```
 
 ### Usage
@@ -71,9 +71,12 @@ val text = span {
   fontFamily = "monospace"
   typeface = getFont(R.font.pacifico)
   textStyle = "bold"
-  textAlign = "normal"
+  alignment = "normal"
   textDecorationLine = "underline"
   lineSpacing = dp(3)
+  verticalPadding = dp(5)
+  paddingTop = dp(5)
+  paddingBottom = dp(5)
   onClick = {
   }
   
@@ -157,13 +160,19 @@ Span.globalStyles.add(AbsoluteSizeSpan(dp(14)))
 
 - lineSpacing
 
+- verticalPadding
+
+- paddingTop
+
+- paddingBottom
+
 - onClick
 
 - fontFamily: include "monospace", "serif", and "sans-serif"
 
 - textStyle: include "normal", "bold", "italic", and "bold_italic"
 
-- textAlign: include "normal", "opposite", and "center"
+- alignment: include "normal", "opposite", and "center"
 
 - textDecorationLine: include "none", "underline", "line-through", and "underline line-through"
 
