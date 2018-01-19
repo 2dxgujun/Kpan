@@ -26,13 +26,14 @@ import me.gujun.android.span.style.LineSpacingSpan
 import me.gujun.android.span.style.TextDecorationLineSpan
 import me.gujun.android.span.style.VerticalPaddingSpan
 
-// TODO Save styles
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   companion object {
-    val UNSPECIFIED = -1
+    const val UNSPECIFIED = -1
 
-    val globalStyles: ArrayList<Any> = arrayListOf()
+    val EMPTY_STYLE = Span()
+
+    var globalStyle: Span = EMPTY_STYLE
   }
 
   var text: CharSequence = ""
@@ -43,15 +44,15 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: UNSPECIFIED
 
-  var fontFamily: String = parent?.fontFamily ?: ""
+  var fontFamily: String? = parent?.fontFamily
 
   var typeface: Typeface? = parent?.typeface
 
-  var textStyle: String = parent?.textStyle ?: ""
+  var textStyle: String? = parent?.textStyle
 
-  var alignment: String = parent?.alignment ?: ""
+  var alignment: String? = parent?.alignment
 
-  var textDecorationLine: String = parent?.textDecorationLine ?: ""
+  var textDecorationLine: String? = parent?.textDecorationLine
 
   @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
 
@@ -63,7 +64,9 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var onClick: (() -> Unit)? = null
 
-  var styles: ArrayList<Any> = arrayListOf()
+  var spans: ArrayList<Any> = ArrayList()
+
+  var style: Span = EMPTY_STYLE
 
   private fun buildCharacterStyle(builder: ArrayList<Any>) {
     if (textColor != UNSPECIFIED) {
@@ -97,7 +100,7 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
     }
 
     if (!TextUtils.isEmpty(textDecorationLine)) {
-      builder.add(TextDecorationLineSpan(textDecorationLine))
+      builder.add(TextDecorationLineSpan(textDecorationLine!!))
     }
 
     if (onClick != null) {
@@ -138,8 +141,13 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
     }
   }
 
+  private fun prebuild() {
+    override(style)
+  }
+
   fun build(): Span {
-    val spans = arrayListOf<Any>()
+    prebuild()
+    val builder = ArrayList<Any>()
     if (!TextUtils.isEmpty(text)) {
       var p = this.parent
       while (p != null) {
@@ -149,25 +157,58 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
         p = p.parent
       }
       append(text)
-
-      buildCharacterStyle(spans)
-      buildParagraphStyle(spans) // AlignmentSpan
-    } else {
-      buildParagraphStyle(spans)
     }
-    // Add custom styles
-    spans.addAll(styles)
+    buildCharacterStyle(builder)
+    buildParagraphStyle(builder)
 
-    spans.forEach {
+    builder.addAll(spans)
+    builder.forEach {
       setSpan(it, 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
     }
     return this
   }
 
-  fun setGlobalStyles() {
-    globalStyles.forEach {
-      setSpan(it, 0, length, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+  fun override(style: Span) {
+    if (textColor == UNSPECIFIED) {
+      textColor = style.textColor
     }
+    if (backgroundColor == UNSPECIFIED) {
+      backgroundColor = style.backgroundColor
+    }
+    if (textSize == UNSPECIFIED) {
+      textSize = style.textSize
+    }
+    if (fontFamily == null) {
+      fontFamily = style.fontFamily
+    }
+    if (typeface == null) {
+      typeface = style.typeface
+    }
+    if (textStyle == null) {
+      textStyle = style.textStyle
+    }
+    if (alignment == null) {
+      alignment = style.alignment
+    }
+    if (textDecorationLine == null) {
+      textDecorationLine = style.textDecorationLine
+    }
+    if (lineSpacing == UNSPECIFIED) {
+      lineSpacing = style.lineSpacing
+    }
+    if (paddingTop == UNSPECIFIED) {
+      paddingTop = style.paddingTop
+    }
+    if (paddingBottom == UNSPECIFIED) {
+      paddingBottom = style.paddingBottom
+    }
+    if (verticalPadding == UNSPECIFIED) {
+      verticalPadding = style.verticalPadding
+    }
+    if (onClick != null) {
+      onClick = style.onClick
+    }
+    spans.addAll(style.spans)
   }
 
   operator fun CharSequence.unaryPlus(): CharSequence {
@@ -186,16 +227,20 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 }
 
 fun span(init: Span.() -> Unit): Span = Span().apply {
-  setGlobalStyles()
+  override(Span.globalStyle)
   init()
   build()
 }
 
 fun span(text: CharSequence, init: Span.() -> Unit): Span = Span().apply {
-  setGlobalStyles()
+  override(Span.globalStyle)
   this.text = text
   init()
   build()
+}
+
+fun style(init: Span.() -> Unit): Span = Span().apply {
+  init()
 }
 
 fun Span.span(init: Span.() -> Unit = {}): Span = run {
@@ -219,7 +264,7 @@ fun Span.link(url: String, text: CharSequence = "",
     init: Span.() -> Unit = {}): Span = run {
   append(Span(parent = this).apply {
     this.text = text
-    this.styles.add(URLSpan(url))
+    this.spans.add(URLSpan(url))
     init()
     build()
   })
@@ -230,7 +275,7 @@ fun Span.quote(@ColorInt color: Int, text: CharSequence = "",
     init: Span.() -> Unit = {}): Span = run {
   append(Span(parent = this).apply {
     this.text = text
-    this.styles.add(QuoteSpan(color))
+    this.spans.add(QuoteSpan(color))
     init()
     build()
   })
@@ -240,7 +285,7 @@ fun Span.quote(@ColorInt color: Int, text: CharSequence = "",
 fun Span.superscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = run {
   append(Span(parent = this).apply {
     this.text = text
-    this.styles.add(SuperscriptSpan())
+    this.spans.add(SuperscriptSpan())
     init()
     build()
   })
@@ -250,7 +295,7 @@ fun Span.superscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span 
 fun Span.subscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = run {
   append(Span(parent = this).apply {
     this.text = text
-    this.styles.add(SubscriptSpan())
+    this.spans.add(SubscriptSpan())
     init()
     build()
   })
@@ -262,7 +307,7 @@ fun Span.image(drawable: Drawable, alignment: String = "bottom",
   drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
   append(Span(parent = this).apply {
     this.text = " "
-    this.styles.add(ImageSpan(drawable, when (alignment) {
+    this.spans.add(ImageSpan(drawable, when (alignment) {
       "bottom" -> ImageSpan.ALIGN_BOTTOM
       "baseline" -> ImageSpan.ALIGN_BASELINE
       else -> throw RuntimeException("Unknown image alignment")
@@ -273,6 +318,6 @@ fun Span.image(drawable: Drawable, alignment: String = "bottom",
   this
 }
 
-fun Span.style(what: Any) = run {
-  this.styles.add(what)
+fun Span.addSpan(what: Any) = run {
+  this.spans.add(what)
 }

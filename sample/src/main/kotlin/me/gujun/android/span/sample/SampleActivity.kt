@@ -5,11 +5,11 @@ import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
-import android.text.style.AbsoluteSizeSpan
 import android.text.style.TextAppearanceSpan
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_sample.text
 import me.gujun.android.span.Span
+import me.gujun.android.span.addSpan
 import me.gujun.android.span.image
 import me.gujun.android.span.link
 import me.gujun.android.span.quote
@@ -25,7 +25,9 @@ class SampleActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_sample)
 
-    Span.globalStyles.add(AbsoluteSizeSpan(dp(14)))
+    Span.globalStyle = style {
+      textSize = dp(14)
+    }
 
     // You must set this movement method to make clickable span work
     text.movementMethod = LinkMovementMethod.getInstance()
@@ -78,8 +80,8 @@ class SampleActivity : AppCompatActivity() {
         }
       }
       +"\n"
-      span("CustomStyle") {
-        style(TextAppearanceSpan(this@SampleActivity,
+      span("CustomSpannable") {
+        addSpan(TextAppearanceSpan(this@SampleActivity,
             R.style.TextAppearance_Sample))
       }
       +"\n"
@@ -145,7 +147,21 @@ class SampleActivity : AppCompatActivity() {
           +"?"
         }
       }
+      +"\n"
+      val reusableStyle = style {
+        textColor = Color.BLACK
+        verticalPadding = dp(3)
+        backgroundColor = Color.LTGRAY
+      }
+      span("Reuse styles") {
+        style = reusableStyle
+      }
+      +"\n"
+      span("Reuse styles") {
+        style = reusableStyle
+      }
     }
+
   }
 
   private fun dp(dp: Int): Int = (dp * resources.displayMetrics.density + .5f).toInt()

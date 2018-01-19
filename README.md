@@ -58,7 +58,7 @@ val text = span {
 You can grab it via Gradle:
 
 ```
-implementation 'me.gujun.android:span:1.2'
+implementation 'me.gujun.android:span:1.3'
 ```
 
 ### Usage
@@ -79,10 +79,15 @@ val text = span {
   paddingBottom = dp(5)
   onClick = {
   }
+  addSpan(TextAppearanceSpan(context, R.style.TextAppearance))
   
-  span("Text") {
-    // text = "Text"
+  span {
+    text = "Hi"
   }
+  
+  span("Hi")
+  
+  +"Hi"
   
   link("http://google.com", "Text")
   
@@ -93,9 +98,6 @@ val text = span {
   superscript("Text")
   
   image(getDrawable(R.drawable.ic_fun))
-  
-  // Add custom span
-  style(TextAppearanceSpan(context, R.style.TextAppearance))
 }
 ```
 
@@ -132,16 +134,41 @@ val text = span {
 }
 ```
 
-#### Global styles
+#### Reusable style
 
-You can change global styles by add spans to the companion object `Span.globalStyles`.
-
-For example, if your project using a custom typeface, you can construct a `CustomTypefaceSpan` 
-and add it to the `Span.globalStyles` then you will not specified typeface each time you using spans. 
-
+You can create reusable styles and reuse them in multiple spans.
 
 ```kotlin
-Span.globalStyles.add(AbsoluteSizeSpan(dp(14)))
+val headerStyle = style {
+  textColor = Color.BLACK
+  textStyle = "bold"
+  textSize = dp(20)
+  verticalPadding = dp(3)
+}
+val content = span {
+  span("Header 1") {
+    style = headerStyle
+  }
+  span {
+    text = "\n...\n"
+  }
+  span("Header 2") {
+    style = headerStyle
+  }
+}
+```
+
+#### Global style
+
+You can set global style by create a *style* and pass it to the companion object `Span.globalStyle`.
+
+For example, if your project using a custom typeface, you can apply styles with custom typeface, 
+then you will no need to specify typeface each time you using spans. 
+
+```kotlin
+Span.globalStyle = style {
+  typeface = getFont(R.font.pacifico)
+}
 ```
 
 ### Reference
@@ -189,7 +216,7 @@ Span.globalStyles.add(AbsoluteSizeSpan(dp(14)))
 
 - image: ImageSpan, include "bottom" and "baseline" alignment
 
-- style: Specify custom spans
+- addSpan: Add custom span
 
 
 ### License
