@@ -157,9 +157,11 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
         p = p.parent
       }
       append(text)
+      buildCharacterStyle(builder)
+      buildParagraphStyle(builder)
+    } else {
+      buildParagraphStyle(builder)
     }
-    buildCharacterStyle(builder)
-    buildParagraphStyle(builder)
 
     builder.addAll(spans)
     builder.forEach {
