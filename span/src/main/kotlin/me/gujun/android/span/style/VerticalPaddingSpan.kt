@@ -24,7 +24,9 @@ class VerticalPaddingSpan(private val paddingTop: Int,
     if (spanstartv == v) {
       fm.top -= paddingTop
       fm.ascent -= paddingTop
+      flag = true
     } else if (flag && text[start - 1] != '\n') {
+      fm.top += paddingTop
       fm.ascent += paddingTop
       flag = false
     } else {

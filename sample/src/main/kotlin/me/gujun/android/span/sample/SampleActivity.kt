@@ -182,7 +182,7 @@ class SampleActivity : AppCompatActivity() {
           verticalPadding = dp(8)
           backgroundColor = Color.BLUE
           textColor = Color.WHITE
-          text = "LineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrap"
+          text = "LineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManually\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap"
         }
       }
     }
