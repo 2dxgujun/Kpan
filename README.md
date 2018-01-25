@@ -58,7 +58,7 @@ val text = span {
 You can grab it via Gradle:
 
 ```
-implementation 'me.gujun.android:span:1.5'
+implementation 'me.gujun.android:span:1.6'
 ```
 
 ### Usage
@@ -136,7 +136,7 @@ val text = span {
 
 #### Reusable style
 
-You can create reusable styles and reuse them in multiple spans.
+You can create reusable styles and use them in multiple spans.
 
 ```kotlin
 val headerStyle = style {
@@ -146,14 +146,32 @@ val headerStyle = style {
   verticalPadding = dp(3)
 }
 val content = span {
-  span("Header 1") {
+  span("Header1") {
     style = headerStyle
   }
   span {
     text = "\n...\n"
   }
-  span("Header 2") {
+  span("Header2") {
     style = headerStyle
+  }
+}
+```
+
+or you can declare an extension function and apply styles as you wish:
+
+```kotlin
+fun Span.header(text: CharSequence): Span = span(text) {
+  textColor = Color.BLACK
+  textStyle = "bold"
+  textSize = dp(20)
+  verticalPadding = dp(3)
+}
+
+val content = span {
+  header("Header1\n")
+  span {
+    text = "..."
   }
 }
 ```

@@ -243,67 +243,61 @@ fun style(init: Span.() -> Unit): Span = Span().apply {
   init()
 }
 
-fun Span.span(init: Span.() -> Unit = {}): Span = run {
+fun Span.span(init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     init()
     build()
   })
-  this
 }
 
-fun Span.span(text: CharSequence, init: Span.() -> Unit = {}): Span = run {
+fun Span.span(text: CharSequence, init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     this.text = text
     init()
     build()
   })
-  this
 }
 
 fun Span.link(url: String, text: CharSequence = "",
-    init: Span.() -> Unit = {}): Span = run {
+    init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     this.text = text
     this.spans.add(URLSpan(url))
     init()
     build()
   })
-  this
 }
 
 fun Span.quote(@ColorInt color: Int, text: CharSequence = "",
-    init: Span.() -> Unit = {}): Span = run {
+    init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     this.text = text
     this.spans.add(QuoteSpan(color))
     init()
     build()
   })
-  this
 }
 
-fun Span.superscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = run {
+fun Span.superscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     this.text = text
     this.spans.add(SuperscriptSpan())
     init()
     build()
   })
-  this
 }
 
-fun Span.subscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = run {
+fun Span.subscript(text: CharSequence = "", init: Span.() -> Unit = {}): Span = apply {
   append(Span(parent = this).apply {
     this.text = text
     this.spans.add(SubscriptSpan())
     init()
     build()
   })
-  this
 }
 
 fun Span.image(drawable: Drawable, alignment: String = "bottom",
-    init: Span.() -> Unit = {}): Span = run {
+    init: Span.() -> Unit = {}): Span = apply {
   drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
   append(Span(parent = this).apply {
     this.text = " "
@@ -315,9 +309,8 @@ fun Span.image(drawable: Drawable, alignment: String = "bottom",
     init()
     build()
   })
-  this
 }
 
-fun Span.addSpan(what: Any) = run {
+fun Span.addSpan(what: Any) = apply {
   this.spans.add(what)
 }
