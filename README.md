@@ -58,7 +58,7 @@ val text = span {
 You can grab it via Gradle:
 
 ```
-implementation 'me.gujun.android:span:1.3'
+implementation 'me.gujun.android:span:1.4'
 ```
 
 ### Usage
