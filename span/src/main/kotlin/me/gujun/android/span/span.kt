@@ -29,8 +29,6 @@ import me.gujun.android.span.style.VerticalPaddingSpan
 class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   companion object {
-    const val UNSPECIFIED = -1
-
     val EMPTY_STYLE = Span()
 
     var globalStyle: Span = EMPTY_STYLE
@@ -38,11 +36,11 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var text: CharSequence = ""
 
-  @ColorInt var textColor: Int = parent?.textColor ?: UNSPECIFIED
+  @ColorInt var textColor: Int? = parent?.textColor
 
-  @ColorInt var backgroundColor: Int = parent?.backgroundColor ?: UNSPECIFIED
+  @ColorInt var backgroundColor: Int? = parent?.backgroundColor
 
-  @Dimension(unit = Dimension.PX) var textSize: Int = parent?.textSize ?: UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var textSize: Int? = parent?.textSize
 
   var fontFamily: String? = parent?.fontFamily
 
@@ -54,13 +52,13 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
 
   var textDecorationLine: String? = parent?.textDecorationLine
 
-  @Dimension(unit = Dimension.PX) var lineSpacing: Int = UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var lineSpacing: Int? = null
 
-  @Dimension(unit = Dimension.PX) var paddingTop: Int = UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var paddingTop: Int? = null
 
-  @Dimension(unit = Dimension.PX) var paddingBottom: Int = UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var paddingBottom: Int? = null
 
-  @Dimension(unit = Dimension.PX) var verticalPadding: Int = UNSPECIFIED
+  @Dimension(unit = Dimension.PX) var verticalPadding: Int? = null
 
   var onClick: (() -> Unit)? = null
 
@@ -69,16 +67,16 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
   var style: Span = EMPTY_STYLE
 
   private fun buildCharacterStyle(builder: ArrayList<Any>) {
-    if (textColor != UNSPECIFIED) {
-      builder.add(ForegroundColorSpan(textColor))
+    if (textColor != null) {
+      builder.add(ForegroundColorSpan(textColor!!))
     }
 
-    if (backgroundColor != UNSPECIFIED) {
-      builder.add(BackgroundColorSpan(backgroundColor))
+    if (backgroundColor != null) {
+      builder.add(BackgroundColorSpan(backgroundColor!!))
     }
 
-    if (textSize != UNSPECIFIED) {
-      builder.add(AbsoluteSizeSpan(textSize))
+    if (textSize != null) {
+      builder.add(AbsoluteSizeSpan(textSize!!))
     }
 
     if (!TextUtils.isEmpty(fontFamily)) {
@@ -122,22 +120,22 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
       }))
     }
 
-    if (lineSpacing != UNSPECIFIED) {
-      builder.add(LineSpacingSpan(lineSpacing))
+    if (lineSpacing != null) {
+      builder.add(LineSpacingSpan(lineSpacing!!))
     }
 
     paddingTop = when {
-      paddingTop != UNSPECIFIED -> paddingTop
-      verticalPadding != UNSPECIFIED -> verticalPadding
+      paddingTop != null -> paddingTop
+      verticalPadding != null -> verticalPadding
       else -> 0
     }
     paddingBottom = when {
-      paddingBottom != UNSPECIFIED -> paddingBottom
-      verticalPadding != UNSPECIFIED -> verticalPadding
+      paddingBottom != null -> paddingBottom
+      verticalPadding != null -> verticalPadding
       else -> 0
     }
     if (paddingTop != 0 || paddingBottom != 0) {
-      builder.add(VerticalPaddingSpan(paddingTop, paddingBottom))
+      builder.add(VerticalPaddingSpan(paddingTop!!, paddingBottom!!))
     }
   }
 
@@ -171,13 +169,13 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
   }
 
   fun override(style: Span) {
-    if (textColor == UNSPECIFIED) {
+    if (textColor == null) {
       textColor = style.textColor
     }
-    if (backgroundColor == UNSPECIFIED) {
+    if (backgroundColor == null) {
       backgroundColor = style.backgroundColor
     }
-    if (textSize == UNSPECIFIED) {
+    if (textSize == null) {
       textSize = style.textSize
     }
     if (fontFamily == null) {
@@ -195,16 +193,16 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
     if (textDecorationLine == null) {
       textDecorationLine = style.textDecorationLine
     }
-    if (lineSpacing == UNSPECIFIED) {
+    if (lineSpacing == null) {
       lineSpacing = style.lineSpacing
     }
-    if (paddingTop == UNSPECIFIED) {
+    if (paddingTop == null) {
       paddingTop = style.paddingTop
     }
-    if (paddingBottom == UNSPECIFIED) {
+    if (paddingBottom == null) {
       paddingBottom = style.paddingBottom
     }
-    if (verticalPadding == UNSPECIFIED) {
+    if (verticalPadding == null) {
       verticalPadding = style.verticalPadding
     }
     if (onClick != null) {

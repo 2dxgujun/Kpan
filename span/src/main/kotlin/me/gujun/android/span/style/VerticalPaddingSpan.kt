@@ -7,28 +7,33 @@ import android.text.style.LineHeightSpan
 class VerticalPaddingSpan(private val paddingTop: Int,
     private val paddingBottom: Int) : LineHeightSpan {
 
+  private var flag: Boolean = true
+
   override fun chooseHeight(text: CharSequence, start: Int, end: Int, spanstartv: Int, v: Int,
       fm: FontMetricsInt) {
     text as Spanned
     val spanStart = text.getSpanStart(this)
     val spanEnd = text.getSpanEnd(this)
 
-//    Log.d("DEBUG", "text: \n$text")
-//    Log.d("DEBUG", "spanStart: $spanStart")
-//    Log.d("DEBUG", "spanEnd: $spanEnd")
-//    Log.d("DEBUG", "start: $start")
-//    Log.d("DEBUG", "end: $end") // end may include the \n character
-//    Log.d("DEBUG", "spanstartv: $spanstartv")
-//    Log.d("DEBUG", "v: $v")
+//    Log.d("DEBUG", "Text: start=$start end=$end v=$v") // end may include the \n character
+//    Log.d("DEBUG", "${text.slice(start until end)}".replace("\n", "#"))
+//    Log.d("DEBUG", "VerticalPadding: spanStart=$spanStart spanEnd=$spanEnd spanstartv=$spanstartv")
+//    Log.d("DEBUG", "$fm")
 //    Log.d("DEBUG", "-----------------------")
 
-    if (spanStart == start) {
+    if (spanstartv == v) {
       fm.top -= paddingTop
       fm.ascent -= paddingTop
+    } else if (flag && text[start - 1] != '\n') {
+      fm.ascent += paddingTop
+      flag = false
+    } else {
+      flag = false
     }
-    if (spanEnd == end || spanEnd == end - 1) {
-      fm.bottom += paddingBottom
+
+    if (end == spanEnd || end - 1 == spanEnd) {
       fm.descent += paddingBottom
+      fm.bottom += paddingBottom
     }
   }
 }

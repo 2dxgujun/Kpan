@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
 import android.text.style.TextAppearanceSpan
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_sample.text
+import kotlinx.android.synthetic.main.activity_sample.content
 import me.gujun.android.span.Span
 import me.gujun.android.span.addSpan
 import me.gujun.android.span.image
@@ -30,8 +30,8 @@ class SampleActivity : AppCompatActivity() {
     }
 
     // You must set this movement method to make clickable span work
-    text.movementMethod = LinkMovementMethod.getInstance()
-    text.text = span {
+    content.movementMethod = LinkMovementMethod.getInstance()
+    content.text = span {
       span("StyleSpan") {
         textStyle = "bold_italic"
       }
@@ -160,8 +160,32 @@ class SampleActivity : AppCompatActivity() {
       span("Reuse styles") {
         style = reusableStyle
       }
+      +"\n"
+      +"ParagraphStyle Test\n"
+      span {
+        span {
+          lineSpacing = dp(8)
+          verticalPadding = dp(8)
+          backgroundColor = Color.RED
+          text = "LineSpacingWithManuallyBreak\nLineSpacingWithManuallyBreak\nLineSpacingWithManuallyBreak"
+        }
+        +"\n"
+        span {
+          lineSpacing = dp(8)
+          verticalPadding = dp(8)
+          backgroundColor = Color.GREEN
+          text = "LineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrapLineSpacingWithWrap"
+        }
+        +"\n"
+        span {
+          lineSpacing = dp(8)
+          verticalPadding = dp(8)
+          backgroundColor = Color.BLUE
+          textColor = Color.WHITE
+          text = "LineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrap\nLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrapLineSpacingCombineManuallyBreakAndWrap"
+        }
+      }
     }
-
   }
 
   private fun dp(dp: Int): Int = (dp * resources.displayMetrics.density + .5f).toInt()
