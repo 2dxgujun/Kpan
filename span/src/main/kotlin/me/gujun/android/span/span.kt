@@ -11,7 +11,6 @@ import android.text.TextUtils
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.AlignmentSpan
 import android.text.style.BackgroundColorSpan
-import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.ImageSpan
 import android.text.style.QuoteSpan
@@ -23,6 +22,7 @@ import android.text.style.URLSpan
 import android.view.View
 import me.gujun.android.span.style.CustomTypefaceSpan
 import me.gujun.android.span.style.LineSpacingSpan
+import me.gujun.android.span.style.SimpleClickableSpan
 import me.gujun.android.span.style.TextDecorationLineSpan
 import me.gujun.android.span.style.VerticalPaddingSpan
 
@@ -102,7 +102,7 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
     }
 
     if (onClick != null) {
-      builder.add(object : ClickableSpan() {
+      builder.add(object : SimpleClickableSpan() {
         override fun onClick(widget: View) {
           onClick?.invoke()
         }
@@ -205,7 +205,7 @@ class Span(val parent: Span? = null) : SpannableStringBuilder() {
     if (verticalPadding == null) {
       verticalPadding = style.verticalPadding
     }
-    if (onClick != null) {
+    if (onClick == null) {
       onClick = style.onClick
     }
     spans.addAll(style.spans)
